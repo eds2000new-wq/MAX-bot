@@ -130,6 +130,7 @@ async function getUpdates() {
         console.error('❌ Ошибка получения обновлений:', error.response?.data || error.message);
         return [];
     }
+    console.log('📡 Запрос к MAX API:', `${config.apiUrl}/updates`);
 }
 
 // ==================== СОЗДАНИЕ КЛАВИАТУР ====================
