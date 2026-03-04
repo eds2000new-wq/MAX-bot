@@ -251,6 +251,7 @@ async function processUpdates() {
             await handleBotStarted(update);
         }
     }
+    console.log('🔄 Проверка обновлений...');
 }
 
 /**
