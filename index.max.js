@@ -101,25 +101,29 @@ async function answerCallback(callbackId, notification = null, updatedMessage = 
 /**
  * Получение обновлений через Long Polling
  */
+// В функции getUpdates замените на:
 async function getUpdates() {
     try {
         const response = await axios.get(
-            `${config.apiUrl}/updates`,
+            `${config.apiUrl}/getUpdates`,  // Изменено с /updates
             {
                 headers: {
                     'Authorization': config.botToken,
                     'Content-Type': 'application/json'
                 },
                 params: {
-                    last_event_id: lastUpdateId,
-                    wait: 30
+                    offset: lastUpdateId,
+                    timeout: 30
                 }
             }
         );
         
-        if (response.data && response.data.updates) {
-            lastUpdateId = response.data.last_event_id || lastUpdateId;
-            return response.data.updates;
+        if (response.data && response.data.ok && response.data.result) {
+            // Обновляем lastUpdateId
+            if (response.data.result.length > 0) {
+                lastUpdateId = response.data.result[response.data.result.length - 1].update_id + 1;
+            }
+            return response.data.result;
         }
         return [];
     } catch (error) {
